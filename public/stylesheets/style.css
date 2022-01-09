@@ -1,0 +1,36 @@
+body {
+  padding: 50px;
+  font: 20px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url("https://trunkey2003.github.io/img/backgroundvn.jpg");
+  background-repeat: repeat;
+}
+
+.heading{
+  color: rgb(204, 234, 236);
+  text-align: center;
+}
+
+.paragraph{
+  color: rgb(170, 180, 180);
+  text-align: center;
+}
+
+.contaniner{
+  text-align: center;
+  margin-top: 50px;
+  width: 100%;
+}
+
+a {
+  background: rgb(9, 61, 110);
+  padding: 10px 20px;
+  border-radius: 10%;
+  color: #00B7FF;
+  text-decoration: none;
+  margin: 0 20px;
+}
+
+a:hover{
+  background: white;
+  color: rgb(28, 129, 224)
+}
