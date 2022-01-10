@@ -137,7 +137,7 @@ class ApiUserController {
     }
 
     getUserSongs(req, res) {
-        const sql = `SELECT user_songs.*, users.user_id FROM user_songs INNER JOIN users ON users.user_name = '${req.params.username}' AND users.user_id = user_songs.user_id`;
+        const sql = `SELECT user_songs.song_id as songid, user_songs.user_id as userid, users.user_id FROM user_songs INNER JOIN users ON users.user_name = '${req.params.username}' AND users.user_id = user_songs.user_id`;
         db.query(sql, (err, result) => {
             if (err) {
                 throw err;
@@ -157,10 +157,11 @@ class ApiUserController {
     }
 
     async deleteUserSongs(req, res, next) {
-        const songCount = await userSong.count({ userid: res.locals.id });
-        userSong.deleteOne({ _id: req.params.id, userid: res.locals.id })
-            .then(() => { user.findOneAndUpdate({ userid: res.locals.id }, { songCount: songCount }, { returnOriginal: false }).then(() => res.status(200).send("Song Deleted !!")) })
-            .catch(() => res.send(`cannot delete song id : ${req.params.id}`));
+        var sql = `DELETE FROM user_songs WHERE song_id ='${req.params.id}'`;
+        // const songCount = await userSong.count({ userid: res.locals.id });
+        // userSong.deleteOne({ _id: req.params.id, userid: res.locals.id })
+        //     .then(() => { user.findOneAndUpdate({ userid: res.locals.id }, { songCount: songCount }, { returnOriginal: false }).then(() => res.status(200).send("Song Deleted !!")) })
+        //     .catch(() => res.send(`cannot delete song id : ${req.params.id}`));
     }
 
     async deleteUserSongsBySongID(req, res, next) {
