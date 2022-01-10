@@ -147,7 +147,7 @@ class ApiUserController {
     }
 
     async postUserSongs(req, res) {
-        var sql = `INSERT INTO users_song VALUES ('${req.body.name}', '${req.body.singer}', '${req.body.path}', '${req.body.image}', '${req.body.songid}', '${req.body.userid}')`;
+        var sql = `INSERT INTO user_songs VALUES ('${req.body.name}', '${req.body.singer}', '${req.body.path}', '${req.body.image}', '${req.body.songid}', '${req.body.userid}')`;
         db.query(sql, (err, result) => {
             if (err) {
                 res.status(409).send("Cannot push song to database");
