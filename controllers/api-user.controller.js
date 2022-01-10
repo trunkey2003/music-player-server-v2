@@ -137,7 +137,7 @@ class ApiUserController {
     }
 
     getUserSongs(req, res) {
-        const sql = `SELECT user_songs.song_id as songid, user_songs.user_id as userid, users.user_id FROM user_songs INNER JOIN users ON users.user_name = '${req.params.username}' AND users.user_id = user_songs.user_id`;
+        const sql = `SELECT user_songs.song_id AS songid, user_songs.user_id AS userid, users.user_id FROM user_songs INNER JOIN users ON users.user_name = '${req.params.username}' AND users.user_id = user_songs.user_id`;
         db.query(sql, (err, result) => {
             if (err) {
                 throw err;
