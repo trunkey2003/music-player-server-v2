@@ -19,7 +19,9 @@ router.get('/user', ApiUserController.validateTokenCookie, ApiUserController.che
 
 router.post('/user/signup/checkusername', ApiUserController.checkUserName);
 router.post('/user/signup', ApiUserController.postUser);
+
 router.put('/user/edit/fullname', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.modifyUserFullName);
+
 router.get('/admin/vn', apiController.getVnSong);
 router.get('/admin/us', apiController.getUsSong);
 // router.get('/cookie', ApiUserController.getCookie);

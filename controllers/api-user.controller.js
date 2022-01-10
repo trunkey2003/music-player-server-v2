@@ -14,14 +14,17 @@ class ApiUserController {
     }
 
     getUser(req, res, next) {
-        const sql = `SELECT * FROM users WHERE user_name = '${req.params.username}'`;
+        const sql = `
+        SELECT user_id AS userid, full_name AS fullname, date_of_birth AS dateOfBirth, user_name AS username, avatar, password
+        FROM users WHERE user_name = '${req.params.username}'
+        `;
         db.query(sql, (err, result) => {
             if (err) {
                 throw err;
             }
             const [newobj] = result;
             if (req.params.username != res.locals.username) {
-                newobj.user_id = undefined;
+                newobj.userid = undefined;
                 newobj.password = undefined;
                 newobj.phone = undefined;
                 newobj.email = undefined;
@@ -125,7 +128,7 @@ class ApiUserController {
 
     setTokenCookie(req, res, next) {
         res.cookie('token', res.locals.token, {
-            sameSite: 'none',
+            sameSite: (process.env.DEV_ENV) ? 'lax' : 'none',
             secure: (process.env.DEV_ENV) ? false : true,
             httpOnly: true,
             maxAge: 3600000 * 24 * 7,
