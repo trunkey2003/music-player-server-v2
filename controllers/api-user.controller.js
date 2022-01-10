@@ -158,6 +158,13 @@ class ApiUserController {
 
     async deleteUserSongs(req, res, next) {
         var sql = `DELETE FROM user_songs WHERE song_id ='${req.params.id}'`;
+        db.query(sql, (err, result) => {
+            if (err) {
+                res.status(409).send("Cannot push song to database");
+            }
+            res.status(200).send(result);
+        });
+
         // const songCount = await userSong.count({ userid: res.locals.id });
         // userSong.deleteOne({ _id: req.params.id, userid: res.locals.id })
         //     .then(() => { user.findOneAndUpdate({ userid: res.locals.id }, { songCount: songCount }, { returnOriginal: false }).then(() => res.status(200).send("Song Deleted !!")) })
