@@ -13,7 +13,7 @@ class ApiUserController {
         else res.status(403).send("You don't have right to access this data !!");
     }
 
-    getUser(req, res, next) {
+    getUser(req, res) {
         const sql = `
         SELECT user_id AS userid, full_name AS fullname, date_of_birth AS dateOfBirth, user_name AS username, avatar, password
         FROM users WHERE user_name = '${req.params.username}'
@@ -127,6 +127,7 @@ class ApiUserController {
     }
 
     setTokenCookie(req, res, next) {
+        console.log(res.locals.token);
         res.cookie('token', res.locals.token, {
             sameSite: (process.env.DEV_ENV) ? 'lax' : 'none',
             secure: (process.env.DEV_ENV) ? false : true,
@@ -146,14 +147,13 @@ class ApiUserController {
     }
 
     async postUserSongs(req, res) {
-        
-        // var sql = `INSERT INTO users (user_id, user_name, password) VALUES ('${uuidv4()}', '${req.body.username}', '${hashedPassword}')`;
-        // db.query(sql, (err, result) => {
-        //     if (err) {
-        //         res.status(409).send("User already exist !!");
-        //     }
-        //     res.status(200).send(result);
-        // });
+        var sql = `INSERT INTO users_song VALUES ('${req.body.name}', '${req.body.singer}', '${req.body.path}', '${req.body.image}', '${req.body.songid}', '${req.body.userid}')`;
+        db.query(sql, (err, result) => {
+            if (err) {
+                res.status(409).send("Cannot push song to database");
+            }
+            res.status(200).send(result);
+        });
     }
 
     async deleteUserSongs(req, res, next) {
