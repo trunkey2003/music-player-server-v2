@@ -15,7 +15,7 @@ class ApiUserController {
 
     getUser(req, res) {
         const sql = `
-        SELECT user_id AS userid, full_name AS fullname, date_of_birth AS dateOfBirth, user_name AS username, avatar, password
+        SELECT user_id AS userid, full_name AS fullName, date_of_birth AS dateOfBirth, user_name AS username, avatar, password
         FROM users WHERE user_name = '${req.params.username}'
         `;
         db.query(sql, (err, result) => {
