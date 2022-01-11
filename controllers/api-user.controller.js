@@ -15,8 +15,10 @@ class ApiUserController {
 
     getUser(req, res) {
         const sql = `
-        SELECT user_id AS userid, full_name AS fullName, date_of_birth AS dateOfBirth, user_name AS username, avatar, password
-        FROM users WHERE user_name = '${req.params.username}'
+        SELECT u.user_id AS userid, u.full_name AS fullName, u.date_of_birth AS dateOfBirth, u.user_name AS username, u.avatar, u.password, COUNT(us.user_id) as Count 
+        FROM users as u INNER JOIN user_songs as us ON us.user_id = u.user_id
+        WHERE u.user_name = '${req.params.username}'
+        GROUP BY u.user_id
         `;
         db.query(sql, (err, result) => {
             if (err) {
