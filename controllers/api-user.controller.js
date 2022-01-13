@@ -109,6 +109,13 @@ class ApiUserController {
         });
     }
 
+    validateActionUser(req, res, next){
+        if (res.locals.username != req.params.username){
+            res.status(403).send("You don't have right to do this action!!");
+        }
+        next();
+    }
+
     validateTokenCookie(req, res, next) {
         if (!req.cookies.token) {
             res.locals.username = undefined;

@@ -5,10 +5,10 @@ const apiController = require('../controllers/api.controller');
 const ApiUserController = require('../controllers/api-user.controller');
 
 /* GET users listing. */
-router.get('/user/:username/songs', ApiUserController.validateTokenCookie ,ApiUserController.checkUser ,ApiUserController.getUserSongs);
-router.post('/user/:username/songs', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.postUserSongs);
-router.delete('/user/:username/songs/:id', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.deleteUserSongs);
-router.delete('/user/:username/songid/:id/', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.deleteUserSongsBySongID);
+router.get('/user/:username/songs', ApiUserController.validateTokenCookie ,ApiUserController.checkUser,ApiUserController.getUserSongs);
+router.post('/user/:username/songs', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.validateActionUser, ApiUserController.postUserSongs);
+router.delete('/user/:username/songs/:id', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.validateActionUser, ApiUserController.deleteUserSongs);
+router.delete('/user/:username/songid/:id/', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.validateActionUser, ApiUserController.deleteUserSongsBySongID);
 
 router.get('/user/signout', ApiUserController.clearCookie);
 router.post('/user/login', ApiUserController.validateLogin, ApiUserController.setToken, ApiUserController.setTokenCookie);
