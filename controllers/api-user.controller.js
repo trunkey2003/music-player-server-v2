@@ -165,6 +165,18 @@ class ApiUserController {
         })
     }
 
+    getUserPlaylist(req, res){
+        const sql = `SELECT user_playlists.* FROM user_playlists INNER JOIN users ON users.user_name = '${req.params.username}' AND users.user_id = user_playlists.user_id`
+        db.query(sql, (err, result) => {
+            if (err) {
+                throw err;
+            }
+            const newObj = result;
+            newObj.filter((index) => delete index["user_id"]);
+            res.status(200).send(newObj);
+        })
+    }
+
     async postUserSongs(req, res) {
         var sql = `INSERT INTO user_songs VALUES ('${req.body.name}', '${req.body.singer}', '${req.body.path}', '${req.body.image}', '${req.body.songid}', '${req.body.userid}', '${req.body.playlistid}')`;
         db.query(sql, (err, result) => {
