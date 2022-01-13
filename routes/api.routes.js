@@ -6,6 +6,7 @@ const ApiUserController = require('../controllers/api-user.controller');
 
 /* GET users listing. */
 router.get('/user/:username/songs', ApiUserController.validateTokenCookie ,ApiUserController.checkUser,ApiUserController.getUserSongs);
+router.get('/user/:username/allsongs', ApiUserController.validateTokenCookie ,ApiUserController.checkUser,ApiUserController.getAllUserSongs);
 router.post('/user/:username/songs', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.validateActionUser, ApiUserController.postUserSongs);
 router.delete('/user/:username/songs/:id', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.validateActionUser, ApiUserController.deleteUserSongs);
 router.delete('/user/:username/songid/:id/', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.validateActionUser, ApiUserController.deleteUserSongsBySongID);
