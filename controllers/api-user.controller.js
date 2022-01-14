@@ -3,7 +3,6 @@ const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
 const saltRounds = 13;
 var jwt = require('jsonwebtoken');
-const { response } = require('express');
 
 class ApiUserController {
     async getAllUser(req, res, next) {
@@ -166,7 +165,12 @@ class ApiUserController {
     }
 
     getUserPlaylist(req, res){
-        const sql = `SELECT up.playlist_id as playlistid, up.playlist_name as playlistName , count(us.song_id) AS songCount FROM user_playlists as up LEFT JOIN user_songs AS us ON us.playlist_id = up.playlist_id INNER JOIN users ON users.user_name = '${req.params.username}' AND users.user_id = up.user_id GROUP BY up.playlist_id ORDER BY songCount DESC;`
+        const sql = `
+        SELECT up.playlist_id as playlistid, up.playlist_name as playlistName , count(us.song_id) AS songCount 
+        FROM user_playlists as up LEFT JOIN user_songs AS us ON us.playlist_id = up.playlist_id 
+        INNER JOIN users ON users.user_name = '${req.params.username}' AND users.user_id = up.user_id 
+        GROUP BY up.playlist_id 
+        ORDER BY up.updated_at;`
         db.query(sql, (err, result) => {
             if (err) {
                 res.status(409).send("Cannot get user playlist");
@@ -178,7 +182,7 @@ class ApiUserController {
     }
 
     postUserPlaylist(req, res){
-        var sql = `INSERT INTO user_playlists VALUES ('${req.body.playlistid}', '${req.body.playlistName}', '${res.locals.userid}')`
+        var sql = `INSERT INTO user_playlists(playlist_id, playlist_name, user_id) VALUES ('${req.body.playlistid}', '${req.body.playlistName}', '${res.locals.userid}')`
         db.query(sql, (err, result) => {
             if (err) {
                 console.log(err);
