@@ -166,10 +166,10 @@ class ApiUserController {
     }
 
     getUserPlaylist(req, res){
-        const sql = `SELECT user_playlists.* FROM user_playlists INNER JOIN users ON users.user_name = '${req.params.username}' AND users.user_id = user_playlists.user_id`
+        const sql = `SELECT up.*, count(us.song_id) FROM user_playlists as up INNER JOIN user_songs AS us ON up.playlist_id = us.playlist_id  INNER JOIN users ON users.user_name = '${req.params.username}' AND users.user_id = up.user_id GROUP BY up.playlist_id;`
         db.query(sql, (err, result) => {
             if (err) {
-                throw err;
+                res.status(409).send("Cannot get user playlist");
             }
             const newObj = result;
             newObj.filter((index) => delete index["user_id"]);
