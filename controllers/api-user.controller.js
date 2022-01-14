@@ -178,9 +178,10 @@ class ApiUserController {
     }
 
     postUserPlaylist(req, res){
-        var sql = `INSERT INTO user_playlist VALUES ('${req.body.playlistid}', '${req.body.playlistName}', '${res.locals.id}')`
+        var sql = `INSERT INTO user_playlists VALUES ('${req.body.playlistid}', '${req.body.playlistName}', '${res.locals.userid}')`
         db.query(sql, (err, result) => {
             if (err) {
+                console.log(err);
                 res.status(403).send("Cannot add your playlist");
             }
             res.status(200).send(result);
