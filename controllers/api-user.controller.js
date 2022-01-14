@@ -145,7 +145,23 @@ class ApiUserController {
     }
 
     getUserSongs(req, res) {
-        const sql = `SELECT us.name, us.singer, us.path, us.image, us.song_id AS songid, us.user_id AS userid, us.playlist_id AS playlistid FROM user_songs as us INNER JOIN users ON users.user_name = '${req.params.username}' AND users.user_id = us.user_id AND us.playlist_id = users.user_id`;
+        const sql = 
+        `SELECT us.name, us.singer, us.path, us.image, us.song_id AS songid, us.user_id AS userid, us.playlist_id AS playlistid 
+        FROM user_songs as us 
+        INNER JOIN users ON users.user_name = '${req.params.username}' AND users.user_id = us.user_id AND us.playlist_id = users.user_id`;
+        db.query(sql, (err, result) => {
+            if (err) {
+                throw err;
+            }
+            res.status(200).send(result);
+        })
+    }
+
+    getUserSongsByPlaylist(req, res){
+        const sql = 
+        `SELECT us.name, us.singer, us.path, us.image, us.song_id AS songid, us.user_id AS userid, us.playlist_id AS playlistid 
+        FROM user_songs as us 
+        INNER JOIN users ON users.user_name = '${req.params.username}' AND users.user_id = us.user_id AND us.playlist_id = '${req.params.playlistid}'`;
         db.query(sql, (err, result) => {
             if (err) {
                 throw err;

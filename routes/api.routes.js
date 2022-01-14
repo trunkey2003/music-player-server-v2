@@ -5,6 +5,7 @@ const apiController = require('../controllers/api.controller');
 const ApiUserController = require('../controllers/api-user.controller');
 
 /* GET users listing. */
+router.get('/user/:username/:playlistid/songs', ApiUserController.validateTokenCookie , ApiUserController.checkUser,ApiUserController.getUserSongsByPlaylist);
 router.get('/user/:username/songs', ApiUserController.validateTokenCookie , ApiUserController.checkUser,ApiUserController.getUserSongs);
 router.get('/user/:username/allsongs', ApiUserController.validateTokenCookie ,ApiUserController.checkUser,ApiUserController.getAllUserSongs);
 router.post('/user/:username/songs', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.validateActionUser, ApiUserController.postUserSongs);
