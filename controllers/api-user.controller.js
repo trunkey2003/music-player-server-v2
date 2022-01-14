@@ -32,7 +32,7 @@ class ApiUserController {
             } else {
                 newobj.password = undefined;
             }
-            if (res.locals.username) newobj.onlog = res.locals.username;
+            if (res.locals.username) newobj.onAccess = res.locals.username;
             res.status(200).send(newobj);
         });
     }
