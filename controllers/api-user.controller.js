@@ -107,7 +107,7 @@ class ApiUserController {
     }
 
     validateLogin(req, res, next) {
-        const sql = `SELECT password, user_id as userid FROM users WHERE user_name = '${req.body.username}'`;
+        const sql = `SELECT password, user_id as userid, user_name as username FROM users WHERE user_name = '${req.body.username}'`;
         db.query(sql, (err, result) => {
             if (err) return;
             if (result.length == 0) {
@@ -118,6 +118,7 @@ class ApiUserController {
                 .then((data) => {
                     if (data == true) {
                         res.locals.userid = result[0].userid;
+                        res.locals.username = result[0].username;
                         next();
                         return;
                     }
@@ -172,7 +173,7 @@ class ApiUserController {
             secure: (process.env.DEV_ENV) ? false : true,
             httpOnly: true,
             maxAge: 3600000 * 24 * 7,
-        }).status(200).send({ userid: res.locals.userid })
+        }).status(200).send({ username: res.locals.username })
     }
 
     getUserSongs(req, res) {
