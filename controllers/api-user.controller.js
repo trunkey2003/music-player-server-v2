@@ -7,7 +7,7 @@ var jwt = require('jsonwebtoken');
 class ApiUserController {
     async getAllUser(req, res, next) {
         const sql = `SELECT * FROM users`;
-        if (res.locals.username == 'trunkey') //because there is only one admin in my server
+        if (res.locals.userid == '9b4836dc-1e08-4a54-9c90-c121ecf8f7bc') //because there is only one admin in my server
             db.query(sql, async (err, result) => { if (err) return; res.send(result) })
         else res.status(403).send("You don't have right to access this data !!");
     }
@@ -15,7 +15,7 @@ class ApiUserController {
     getUser(req, res) {
         const sql = `
         SELECT u.user_id AS userid, u.full_name AS fullName, u.date_of_birth AS dateOfBirth, u.user_name AS username, u.avatar, u.password, COUNT(us.user_id) as songCount 
-        FROM users as u INNER JOIN user_songs as us ON us.user_id = u.user_id
+        FROM users as u LEFT JOIN user_songs as us ON us.user_id = u.user_id
         WHERE u.user_name = '${req.params.username}'
         GROUP BY u.user_id
         `;
@@ -25,6 +25,8 @@ class ApiUserController {
             }
             const [newobj] = result;
             if (!result.length){
+                res.send(result);
+                return;
                 res.status(404).send(`User ${req.params.username} doesn't exist`);
                 return;
             }
@@ -70,7 +72,7 @@ class ApiUserController {
             if (err) {
                 res.status(409).send("User already exist !!");
             }
-            res.status(200).send(result);
+            res.status(200).send({username : req.body.username});
         });
     }
 

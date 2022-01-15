@@ -16,6 +16,8 @@ router.get('/user/:username/playlists', ApiUserController.validateTokenCookie, A
 router.post('/user/:username/playlists', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.postUserPlaylist);
 router.delete('/user/:username/playlists/:playlistid', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.validateActionUser, ApiUserController.deleteUserPlaylist);
 
+router.post('/user/signup/checkusername', ApiUserController.checkUserName);
+router.post('/user/signup', ApiUserController.postUser);
 router.get('/user/signout', ApiUserController.clearCookie);
 router.post('/user/login', ApiUserController.validateLogin, ApiUserController.setToken, ApiUserController.setTokenCookie);
 
@@ -23,8 +25,6 @@ router.post('/user/login', ApiUserController.validateLogin, ApiUserController.se
 router.get('/user/:username', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.getUser);
 router.get('/user', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.getAllUser);
 
-router.post('/user/signup/checkusername', ApiUserController.checkUserName);
-router.post('/user/signup', ApiUserController.postUser);
 
 router.put('/user/edit/:username/fullname', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.validateActionUser, ApiUserController.modifyUserFullName);
 router.put('/user/edit/:username/username', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.validateActionUser, ApiUserController.modifyUserUserName);
