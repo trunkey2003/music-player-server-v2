@@ -250,7 +250,7 @@ class ApiUserController {
     }
 
     postFirstUserPlaylist(req, res){
-        var sql = `INSERT INTO user_playlists(playlist_id, playlist_name, user_id) VALUES ('${req.params.userid}', 'Default Playlist', '${res.params.userid}')`;
+        var sql = `INSERT INTO user_playlists(playlist_id, playlist_name, user_id) VALUES ('${req.params.userid}', 'Default Playlist', '${req.params.userid}')`;
         db.query(sql, (err, result) => {
             if (err) {
                 console.log(err);
