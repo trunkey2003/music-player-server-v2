@@ -41,7 +41,8 @@ class ApiUserController {
         const sql = `UPDATE users SET full_name = '${req.body.fullName}' WHERE user_name = '${res.locals.username}'`;
         db.query(sql, (err, result) => {
             if (err) {
-                throw err;
+                res.status(403).send("cannot set full name");
+                return;
             }
             res.status(200).send(result);
         });
@@ -51,7 +52,8 @@ class ApiUserController {
         const sql = `UPDATE users SET user_name = '${req.body.username}' WHERE user_name = '${res.locals.username}'`;
         db.query(sql, (err, result) => {
             if (err) {
-                throw err;
+                res.status(403).send("cannot set user name");
+                return;
             }
             res.status(200).send(result);
         });
