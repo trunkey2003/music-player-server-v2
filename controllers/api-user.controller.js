@@ -47,6 +47,16 @@ class ApiUserController {
         });
     }
 
+    modifyUserUserName(req, res) {
+        const sql = `UPDATE users SET user_name = '${req.body.username}' WHERE user_name = '${res.locals.username}'`;
+        db.query(sql, (err, result) => {
+            if (err) {
+                throw err;
+            }
+            res.status(200).send(result);
+        });
+    }
+
     async postUser(req, res) {
         const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
         var sql = `INSERT INTO users (user_id, user_name, password) VALUES ('${uuidv4()}', '${req.body.username}', '${hashedPassword}')`;

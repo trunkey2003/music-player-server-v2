@@ -26,7 +26,8 @@ router.get('/user', ApiUserController.validateTokenCookie, ApiUserController.che
 router.post('/user/signup/checkusername', ApiUserController.checkUserName);
 router.post('/user/signup', ApiUserController.postUser);
 
-router.put('/user/edit/fullname', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.modifyUserFullName);
+router.put('/user/edit/fullname', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.validateActionUser, ApiUserController.modifyUserFullName);
+router.put('/user/edit/username', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.validateActionUser, ApiUserController.modifyUserUserName);
 
 router.get('/admin/vn', apiController.getVnSong);
 router.get('/admin/us', apiController.getUsSong);
