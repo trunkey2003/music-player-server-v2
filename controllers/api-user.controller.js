@@ -24,6 +24,10 @@ class ApiUserController {
                 res.status(404).send(err);
             }
             const [newobj] = result;
+            if (!result.length){
+                res.status(404).send(`User ${req.params.username} doesn't exist`);
+                return;
+            }
             if (req.params.username != res.locals.username) {
                 newobj.userid = undefined;
                 newobj.password = undefined;
@@ -81,22 +85,29 @@ class ApiUserController {
     }
 
     checkUser(req, res, next) {
-        if (!res.locals.username) {
+        if (!res.locals.userid) {
             next();
             return;
         }
 
-        const sql = `SELECT user_name, user_id FROM users WHERE user_name = '${res.locals.username}'`;
+        const sql = `SELECT user_name, user_id FROM users WHERE user_id = '${res.locals.userid}'`;
         db.query(sql, (err, result) => {
+            if (err) {
+                return;
+            }
+           
             const [user] = result;
-            if (!user) res.status(200).send("You are not my user");
-            res.locals.userid = user.user_id;
+            if (!user) {
+                res.status(200).send("You are not my user");
+                return;
+            }
+            res.locals.username = user.user_name;
             next();
         })
     }
 
     validateLogin(req, res, next) {
-        const sql = `SELECT password FROM users WHERE user_name = '${req.body.username}'`;
+        const sql = `SELECT password, user_id as userid FROM users WHERE user_name = '${req.body.username}'`;
         db.query(sql, (err, result) => {
             if (err) return;
             if (result.length == 0) {
@@ -106,7 +117,7 @@ class ApiUserController {
             bcrypt.compare(req.body.password, result[0].password)
                 .then((data) => {
                     if (data == true) {
-                        res.locals.username = req.body.username;
+                        res.locals.userid = result[0].userid;
                         next();
                         return;
                     }
@@ -116,9 +127,12 @@ class ApiUserController {
     }
 
     setToken(req, res, next) {
-        const user = { username: res.locals.username };
+        const user = { userid: res.locals.userid };
         jwt.sign(user, process.env.TOKEN_SECRET_KEY, (err, token) => {
-            if (err) res.status(403).send("Cannot Set Token");
+            if (err) {
+                res.status(403).send("Cannot Set Token");
+                return;
+            }
             res.locals.token = token;
             next();
         });
@@ -142,11 +156,11 @@ class ApiUserController {
 
         jwt.verify(req.cookies.token, process.env.TOKEN_SECRET_KEY, (err, user) => {
             if (err) {
-                res.locals.username = undefined;
+                res.locals.userid = undefined;
                 next();
                 return;
             }
-            res.locals.username = user.username;
+            res.locals.userid = user.userid;
             next();
         })
     }
@@ -158,7 +172,7 @@ class ApiUserController {
             secure: (process.env.DEV_ENV) ? false : true,
             httpOnly: true,
             maxAge: 3600000 * 24 * 7,
-        }).status(200).send({ username: res.locals.username })
+        }).status(200).send({ userid: res.locals.userid })
     }
 
     getUserSongs(req, res) {
@@ -168,7 +182,8 @@ class ApiUserController {
         INNER JOIN users ON users.user_name = '${req.params.username}' AND users.user_id = us.user_id AND us.playlist_id = users.user_id`;
         db.query(sql, (err, result) => {
             if (err) {
-                throw err;
+                res.status(404).send(err);
+                return;
             }
             res.status(200).send(result);
         })
@@ -181,7 +196,8 @@ class ApiUserController {
         INNER JOIN users ON users.user_name = '${req.params.username}' AND users.user_id = us.user_id AND us.playlist_id = '${req.params.playlistid}'`;
         db.query(sql, (err, result) => {
             if (err) {
-                throw err;
+                res.status(404).send(err);
+                return;
             }
             res.status(200).send(result);
         })
@@ -191,7 +207,8 @@ class ApiUserController {
         const sql = `SELECT us.name, us.singer, us.path, us.image, us.song_id AS songid, us.user_id AS userid, us.playlist_id AS playlistid FROM user_songs as us INNER JOIN users ON users.user_name = '${req.params.username}' AND users.user_id = us.user_id`;
         db.query(sql, (err, result) => {
             if (err) {
-                throw err;
+                res.status(404).send(err);
+                return;
             }
             res.status(200).send(result);
         })
@@ -207,6 +224,7 @@ class ApiUserController {
         db.query(sql, (err, result) => {
             if (err) {
                 res.status(409).send("Cannot get user playlist");
+                return;
             }
             const newObj = result;
             newObj.filter((index) => delete index["user_id"]);
@@ -220,6 +238,7 @@ class ApiUserController {
             if (err) {
                 console.log(err);
                 res.status(403).send("Cannot add your playlist");
+                return;
             }
             res.status(200).send(result);
         })
@@ -247,6 +266,7 @@ class ApiUserController {
         db.query(sql, (err, result) => {
             if (err) {
                 res.status(409).send("Cannot push song to database");
+                return;
             }
             res.status(200).send(result);
         });
@@ -257,6 +277,7 @@ class ApiUserController {
         db.query(sql, (err, result) => {
             if (err) {
                 res.status(409).send("Cannot push song to database");
+                return;
             }
             res.status(200).send(result);
         });
