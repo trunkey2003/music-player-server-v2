@@ -43,6 +43,17 @@ class ApiUserController {
         });
     }
 
+    deleteUser(req, res){
+        const sql = `DELETE FROM users WHERE (user_name = '${req.params.username}');`;
+        db.query(sql, (err, result) => {
+            if (err) {
+                res.status(409).send("Cannot delete user");
+                return;
+            }
+            res.status(200).send(result);
+        });
+    }
+
     modifyUserFullName(req, res) {
         const sql = `UPDATE users SET full_name = '${req.body.fullName}' WHERE user_name = '${res.locals.username}'`;
         db.query(sql, (err, result) => {

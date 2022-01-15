@@ -24,6 +24,7 @@ router.post('/user/login', ApiUserController.validateLogin, ApiUserController.se
 
 //GET USER
 router.get('/user/:username', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.getUser);
+router.delete('/user/:username', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.validateActionUser, ApiUserController.deleteUser);
 router.get('/user', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.getAllUser);
 
 
