@@ -17,6 +17,7 @@ router.post('/user/:username/playlists', ApiUserController.validateTokenCookie, 
 router.delete('/user/:username/playlists/:playlistid', ApiUserController.validateTokenCookie, ApiUserController.checkUser, ApiUserController.validateActionUser, ApiUserController.deleteUserPlaylist);
 
 router.post('/user/signup/checkusername', ApiUserController.checkUserName);
+router.post('/user/signup/:userid', ApiUserController.postFirstUserPlaylist);
 router.post('/user/signup', ApiUserController.postUser);
 router.get('/user/signout', ApiUserController.clearCookie);
 router.post('/user/login', ApiUserController.validateLogin, ApiUserController.setToken, ApiUserController.setTokenCookie);

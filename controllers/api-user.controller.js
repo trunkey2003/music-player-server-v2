@@ -247,6 +247,18 @@ class ApiUserController {
         })
     }
 
+    postFirstUserPlaylist(req, res){
+        var sql = `INSERT INTO user_playlists(playlist_id, playlist_name, user_id) VALUES ('${req.params.userid}', 'Default Playlist', '${res.params.userid}')`;
+        db.query(sql, (err, result) => {
+            if (err) {
+                console.log(err);
+                res.status(409).send("Cannot add first playlist");
+                return;
+            }
+            res.status(200).send(result);
+        })
+    }
+
     deleteUserPlaylist(req, res){
         var sql = `DELETE FROM user_playlists WHERE playlist_id = '${req.params.playlistid}' AND user_id = '${res.locals.userid}'`
         db.query(sql, (err, result) => {
