@@ -21,7 +21,7 @@ class ApiUserController {
         `;
         db.query(sql, (err, result) => {
             if (err) {
-                throw err;
+                res.status(404).send(err);
             }
             const [newobj] = result;
             if (req.params.username != res.locals.username) {
@@ -74,7 +74,7 @@ class ApiUserController {
         var sql = `SELECT user_name FROM users WHERE user_name = '${req.body.username}' `;
         db.query(sql, (err, result) => {
             if (err) {
-                throw err;
+                res.status(404).send(err);
             }
             res.send(!(result.length)); //EXIST AT LEAST 1 USERNAME EQUAL TO REQ.BODY.USERNAME
         });
@@ -99,7 +99,10 @@ class ApiUserController {
         const sql = `SELECT password FROM users WHERE user_name = '${req.body.username}'`;
         db.query(sql, (err, result) => {
             if (err) return;
-            if (result.length == 0) res.status(403).send("Wrong username or password !!");
+            if (result.length == 0) {
+                res.status(403).send("Wrong username or password !!");
+                return;
+            }
             bcrypt.compare(req.body.password, result[0].password)
                 .then((data) => {
                     if (data == true) {
