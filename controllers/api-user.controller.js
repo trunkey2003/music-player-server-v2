@@ -112,6 +112,7 @@ class ApiUserController {
     validateActionUser(req, res, next){
         if (res.locals.username != req.params.username){
             res.status(403).send("You don't have right to do this action!!");
+            return;
         }
         next();
     }
@@ -210,12 +211,19 @@ class ApiUserController {
     }
 
     deleteUserPlaylist(req, res){
-        var sql = `DELETE FROM user_playlists WHERE playlist_id = '${req.params.playlistid}'`
+        var sql = `DELETE FROM user_playlists WHERE playlist_id = '${req.params.playlistid}' AND user_id = '${res.locals.userid}'`
         db.query(sql, (err, result) => {
             if (err) {
                 res.status(404).send("Cannot delete");
+                return;
+            }
+            
+            if (result.affectedRows == 0) {
+                res.status(304).send(result);
+                return;
             }
             res.status(200).send(result);
+            
         })
     }
 
