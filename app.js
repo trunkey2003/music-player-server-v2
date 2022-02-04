@@ -1,11 +1,11 @@
 const dotenv = require('dotenv');
-dotenv.config();
 
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require('cors');
+dotenv.config();
 
 const indexRouter = require('./routes/index.routes');
 const apiRouter = require('./routes/api.routes');
