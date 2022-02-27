@@ -78,7 +78,7 @@ class ApiUserController {
 
     async postUser(req, res) {
         const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
-        var sql = `INSERT INTO users (user_id, user_name, email, password) VALUES ('${req.body.userid}', '${req.body.username}', '${req.body.email}' ,'${hashedPassword}')`;
+        var sql = `INSERT INTO users (user_id, user_name, email, password) VALUES ('${uuidv4()}', '${req.body.username}', '${req.body.email}' ,'${hashedPassword}')`;
         db.query(sql, (err, result) => {
             if (err) {
                 console.log(err);
